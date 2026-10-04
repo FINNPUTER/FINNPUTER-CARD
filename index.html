@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FINNPUTER Card. One card, fiat or crypto.</title>
+<meta name="description" content="FINNPUTER Card is coming soon. Fund it with euros, dollars or supported stablecoins and spend with one card. Join the waitlist.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://card.finnputerdex.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="FINNPUTER Card. One card, fiat or crypto.">
+<meta property="og:description" content="Coming soon. Fund it with euros, dollars or supported stablecoins and spend with one card.">
+<meta property="og:url" content="https://card.finnputerdex.com/">
+<meta property="og:image" content="https://card.finnputerdex.com/assets/img/card-glow-og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@FINNPUTER28">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" as="image" href="assets/img/card-glow-1100.webp" imagesrcset="assets/img/card-glow-720.webp 720w, assets/img/card-glow-1100.webp 1100w, assets/img/card-glow-1672.webp 1672w" imagesizes="(min-width: 960px) 62vw, 130vw">
+<link rel="stylesheet" href="assets/styles.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<canvas id="spark" aria-hidden="true"></canvas>
+
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#card" aria-label="FINNPUTER Card, back to top">FINNPUTER <span>Card</span></a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#cards">Card</a>
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a class="btn btn--small" href="#waitlist">Join the waitlist</a>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero" id="card">
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="hero__visual" id="heroVisual" aria-hidden="true">
+    <img class="hero__img" alt="" width="1672" height="941" fetchpriority="high"
+      src="assets/img/card-glow-1100.webp"
+      srcset="assets/img/card-glow-720.webp 720w, assets/img/card-glow-1100.webp 1100w, assets/img/card-glow-1672.webp 1672w"
+      sizes="(min-width: 960px) 62vw, 130vw">
+    <div class="hero__sweep"></div>
+  </div>
+  <div class="hero__copy wrap">
+    <p class="hero__name">FINNPUTER Card</p>
+    <h1 class="hero__title">One card. <span>Fiat or crypto.</span></h1>
+    <p class="hero__sub">Fund it with euros, dollars or supported stablecoins. Spend with one card.</p>
+    <div class="hero__cta">
+      <a class="btn" href="#waitlist">Join the waitlist</a>
+      <a class="btn btn--ghost" href="#how">See how it works</a>
+    </div>
+    <p class="status"><span class="status__dot"></span><span class="shiny">Coming soon</span></p>
+  </div>
+</section>
+
+<!-- FUNDING -->
+<section class="band funding" id="funding">
+  <div class="wrap">
+    <h2 class="h2" data-reveal>Your money. Your choice.</h2>
+    <p class="lead" data-reveal>Add funds with a bank transfer or with supported stablecoins. One card, one simple way to spend.</p>
+    <ul class="assets" data-stagger>
+      <li class="asset" data-reveal><b>EUR</b><span>Bank transfer</span></li>
+      <li class="asset" data-reveal><b>USD</b><span>Bank transfer</span></li>
+      <li class="asset" data-reveal><b>USDC</b><span>Stablecoin</span></li>
+      <li class="asset asset--soft" data-reveal><b>USDT</b><span>Stablecoin, where available</span></li>
+    </ul>
+    <p class="fine" data-reveal>Planned funding options. Supported networks and regions are announced before launch.</p>
+  </div>
+</section>
+
+<!-- CARD SHOWCASE (pinned scroll film, real renders) -->
+<section class="showcase" id="cards" aria-label="The three cards" data-skin="virtual">
+  <div class="showcase__pin">
+    <div class="showcase__glow" aria-hidden="true"></div>
+    <div class="wrap showcase__head">
+      <h2 class="h2 showcase__title">Virtual. Physical. Metal.</h2>
+    </div>
+    <div class="film" id="film" aria-hidden="true">
+      <div class="film__tilt">
+        <img class="film__img film__img--a" alt="" width="1672" height="941" loading="lazy"
+          src="assets/img/card-glow-1100.webp"
+          srcset="assets/img/card-glow-720.webp 720w, assets/img/card-glow-1100.webp 1100w, assets/img/card-glow-1672.webp 1672w"
+          sizes="(min-width: 960px) 72vw, 150vw">
+        <img class="film__img film__img--b" alt="" width="1672" height="941" loading="lazy"
+          src="assets/img/card-gold-1100.webp"
+          srcset="assets/img/card-gold-720.webp 720w, assets/img/card-gold-1100.webp 1100w, assets/img/card-gold-1672.webp 1672w"
+          sizes="(min-width: 960px) 72vw, 150vw">
+        <canvas class="film__canvas" id="filmCanvas" hidden></canvas>
+        <img class="film__img film__img--p" alt="" width="1672" height="941" loading="lazy"
+          src="assets/img/card-physical-1100.webp"
+          srcset="assets/img/card-physical-720.webp 720w, assets/img/card-physical-1100.webp 1100w"
+          sizes="(min-width: 960px) 72vw, 150vw">
+        <div class="film__flash"></div>
+      </div>
+    </div>
+    <div class="wrap showcase__info">
+      <div class="tabs" role="tablist" aria-label="Card type">
+        <button class="tab is-on" role="tab" aria-selected="true" data-card="0">Virtual</button>
+        <button class="tab" role="tab" aria-selected="false" data-card="1">Physical</button>
+        <button class="tab" role="tab" aria-selected="false" data-card="2">Metal</button>
+      </div>
+      <div class="panes">
+        <article class="pane is-on" data-pane="0">
+          <p class="pane__line">On your phone right after approval.</p>
+          <ul class="ticks">
+            <li>Online payments</li>
+            <li>Apple Pay and Google Pay where available</li>
+            <li>Freeze and unfreeze in one tap</li>
+            <li>Your own spending limits</li>
+          </ul>
+          <p class="tag">Coming soon</p>
+        </article>
+        <article class="pane" data-pane="1">
+          <p class="pane__line">For the shop, the bar and the airport.</p>
+          <ul class="ticks">
+            <li>In store and online</li>
+            <li>Contactless</li>
+            <li>ATM withdrawals where supported</li>
+            <li>Same controls as the virtual card</li>
+          </ul>
+          <p class="tag">Coming soon</p>
+        </article>
+        <article class="pane" data-pane="2">
+          <p class="pane__line">Brushed black metal with a gold edge.</p>
+          <ul class="ticks">
+            <li>Everything the physical card does</li>
+            <li>Real metal, real weight</li>
+            <li>Made in a small first batch</li>
+            <li>Reserve yours on the waitlist</li>
+          </ul>
+          <p class="tag tag--gold">Coming later</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METAL -->
+<section class="metal" id="metal">
+  <div class="metal__visual" aria-hidden="true">
+    <img alt="" loading="lazy" width="1672" height="941"
+      src="assets/img/card-gold-1100.webp"
+      srcset="assets/img/card-gold-720.webp 720w, assets/img/card-gold-1100.webp 1100w, assets/img/card-gold-1672.webp 1672w"
+      sizes="(min-width: 960px) 70vw, 140vw">
+    <div class="metal__sweep"></div>
+  </div>
+  <div class="wrap metal__copy">
+    <h2 class="h2 h2--gold" data-reveal>The one you put on the table.</h2>
+    <p class="lead" data-reveal>FINNPUTER Metal is planned as a limited first batch. Tell us on the waitlist that you want one. We order when enough people do.</p>
+    <a class="btn btn--gold" href="#waitlist" data-reveal>Reserve a metal card</a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="band how" id="how">
+  <div class="wrap">
+    <h2 class="h2" data-reveal>Add money. Use card.</h2>
+    <ol class="steps" data-stagger>
+      <li class="step" data-reveal><h3>Add money</h3><p>Bank transfer or supported stablecoins.</p></li>
+      <li class="step" data-reveal><h3>Choose your card</h3><p>Virtual, physical or metal.</p></li>
+      <li class="step" data-reveal><h3>Spend</h3><p>Pay with your FINNPUTER Card wherever the card network is accepted.</p></li>
+      <li class="step" data-reveal><h3>Stay in control</h3><p>See every payment, freeze the card and set limits in one place.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- DASHBOARD PREVIEW -->
+<section class="band preview" id="preview">
+  <div class="wrap preview__grid">
+    <div class="preview__copy">
+      <h2 class="h2" data-reveal>Everything in one screen.</h2>
+      <p class="lead" data-reveal>Balances, card and controls sit next to each other. This is a design preview of the app we are building, not a live product.</p>
+      <ul class="ticks ticks--wide" data-reveal>
+        <li>See what you hold in each currency</li>
+        <li>Freeze the card the second it goes missing</li>
+        <li>Set limits that fit how you spend</li>
+      </ul>
+    </div>
+    <div class="phone" id="phone" data-reveal aria-label="Preview of the FINNPUTER Card app">
+      <div class="phone__screen">
+        <div class="phone__top"><span>FINNPUTER Card</span><span class="phone__pill">Preview</span></div>
+        <p class="phone__label">Total balance</p>
+        <p class="phone__total"><span data-count="8730" data-prefix="€" data-decimals="2">€8,730.00</span></p>
+        <div class="mini" id="mini">
+          <img class="mini__img" alt="" loading="lazy" src="assets/img/card-glow-720.webp" width="720" height="405">
+          <span class="mini__num">•••• 2847</span>
+          <span class="mini__state">Active</span>
+        </div>
+        <div class="phone__actions">
+          <span>Add money</span><span>Card</span><span>Freeze</span><span>Limits</span>
+        </div>
+        <ul class="phone__assets">
+          <li><b>EUR</b><span>€4,820.00</span></li>
+          <li><b>USD</b><span>$1,200.00</span></li>
+          <li><b>USDC</b><span>2,400.00</span></li>
+          <li><b>USDT</b><span>650.00</span></li>
+        </ul>
+        <ul class="phone__tx">
+          <li><span>Coffee</span><span>€4.20</span></li>
+          <li><span>Groceries</span><span>€62.75</span></li>
+          <li><span>Train ticket</span><span>€38.00</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="band why" id="features">
+  <div class="wrap">
+    <h2 class="h2" data-reveal>Why this card.</h2>
+    <div class="spots" data-stagger>
+      <article class="spot" data-reveal><h3>Fiat and stablecoins</h3><p>Euros, dollars and stablecoins sit behind the same card.</p></article>
+      <article class="spot" data-reveal><h3>Virtual and physical</h3><p>On your phone first, in your wallet when it arrives.</p></article>
+      <article class="spot" data-reveal><h3>Built for people who hold crypto</h3><p>You should not need three apps and a bank to buy a coffee.</p></article>
+      <article class="spot" data-reveal><h3>You stay in control</h3><p>Freeze the card, set limits and see every payment.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- TOKEN -->
+<section class="band token" id="token">
+  <div class="wrap token__grid">
+    <div>
+      <h2 class="h2" data-reveal>Hold FINNPUTER. Pay less.</h2>
+      <p class="lead" data-reveal>The card works without the token. Holding $FINNPUTER is planned to unlock better card tiers with a lower service fee.</p>
+      <p class="fine" data-reveal id="tierNote">Tiers and rates are published before launch. A lower fee is a discount on the product. It is not a return on the token.</p>
+    </div>
+    <ol class="tiers" id="tiers" data-stagger aria-label="Planned card tiers">
+      <li class="tier" data-reveal style="--w:100%"><b>Standard</b><span>No token needed</span><i></i></li>
+      <li class="tier" data-reveal style="--w:84%"><b>Starter</b><span>Lower fee</span><i></i></li>
+      <li class="tier" data-reveal style="--w:68%"><b>Core</b><span>Lower fee</span><i></i></li>
+      <li class="tier" data-reveal style="--w:52%"><b>Pro</b><span>Lower fee</span><i></i></li>
+      <li class="tier tier--gold" data-reveal style="--w:38%"><b>Elite</b><span>Lowest fee</span><i></i></li>
+    </ol>
+  </div>
+  <div class="wrap calc" id="calc" hidden>
+    <h3 class="h3">What holding saves you</h3>
+    <label class="calc__label" for="spend">What you load per month <output id="spendOut">$2,000</output></label>
+    <input class="calc__range" id="spend" type="range" min="250" max="15000" step="250" value="2000">
+    <div class="calc__rows" id="calcRows"></div>
+    <p class="fine">Illustrative. Final rates depend on the card programme.</p>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="band eco" id="ecosystem">
+  <div class="wrap">
+    <p class="eco__line" data-reveal>Analyze. Trade. Hold. <em>Spend.</em></p>
+    <p class="lead" data-reveal>FINNPUTER already helps you read the market and trade it. The card is being built for what comes next: using it.</p>
+    <p class="eco__links" data-reveal>
+      <a href="https://core.finnputerdex.com" rel="noopener">CORE</a>
+      <a href="https://t.me/FinnputerTradeBot" rel="noopener">Trade Bot</a>
+      <a href="https://hub.finnputerdex.com" rel="noopener">Ecosystem hub</a>
+    </p>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="band waitlist" id="waitlist">
+  <div class="wrap waitlist__grid">
+    <div class="waitlist__copy">
+      <h2 class="h2" data-reveal>Get on the list.</h2>
+      <p class="lead" data-reveal>Early access goes to the waitlist first. It also tells the card provider how many of us there are, which gets everyone better terms.</p>
+    </div>
+
+    <div class="form" data-reveal>
+      <form id="joinForm" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label for="country">Country of residence</label>
+          <select id="country" name="country" required><option value="">Choose your country</option></select>
+        </div>
+        <div class="field field--hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <label class="check">
+          <input type="checkbox" id="consent" name="consent" required>
+          <span>FINNPUTER may store my answers and email me about the card. I can unsubscribe at any time. <a href="privacy.html">Privacy policy</a></span>
+        </label>
+        <p class="form__msg" id="joinMsg" role="alert"></p>
+        <button class="btn btn--full" type="submit" id="joinBtn">Join the waitlist</button>
+      </form>
+
+      <div class="done" id="done" hidden>
+        <h3 class="done__title">You're on the list.</h3>
+        <p class="done__sub" id="doneSub">We'll let you know when FINNPUTER Card is ready.</p>
+        <form id="moreForm" novalidate>
+          <p class="done__ask">Six quick questions. All optional. Your answers help us get better terms from the card provider.</p>
+          <fieldset class="chips"><legend>Which card do you want?</legend>
+            <label><input type="radio" name="card_interest" value="virtual"><span>Virtual</span></label>
+            <label><input type="radio" name="card_interest" value="physical"><span>Physical</span></label>
+            <label><input type="radio" name="card_interest" value="metal"><span>Metal</span></label>
+            <label><input type="radio" name="card_interest" value="multiple"><span>More than one</span></label>
+          </fieldset>
+          <fieldset class="chips"><legend>How would you fund it?</legend>
+            <label><input type="radio" name="funding" value="fiat"><span>Bank transfer</span></label>
+            <label><input type="radio" name="funding" value="usdc"><span>USDC</span></label>
+            <label><input type="radio" name="funding" value="usdt"><span>USDT</span></label>
+            <label><input type="radio" name="funding" value="multiple"><span>A mix</span></label>
+          </fieldset>
+          <fieldset class="chips"><legend>How much would you spend per month?</legend>
+            <label><input type="radio" name="monthly_spend" value="lt1k"><span>Under $1,000</span></label>
+            <label><input type="radio" name="monthly_spend" value="1k_5k"><span>$1,000 to $5,000</span></label>
+            <label><input type="radio" name="monthly_spend" value="5k_10k"><span>$5,000 to $10,000</span></label>
+            <label><input type="radio" name="monthly_spend" value="gt10k"><span>Over $10,000</span></label>
+          </fieldset>
+          <fieldset class="chips"><legend>What is a fair one time price for the card?</legend>
+            <label><input type="radio" name="price_ok" value="0"><span>It should be free</span></label>
+            <label><input type="radio" name="price_ok" value="25"><span>Up to $25</span></label>
+            <label><input type="radio" name="price_ok" value="75"><span>Up to $75</span></label>
+            <label><input type="radio" name="price_ok" value="150"><span>Up to $150</span></label>
+            <label><input type="radio" name="price_ok" value="more"><span>More for metal</span></label>
+          </fieldset>
+          <fieldset class="chips"><legend>Already using FINNPUTER?</legend>
+            <label><input type="radio" name="finnputer_user" value="yes"><span>Yes</span></label>
+            <label><input type="radio" name="finnputer_user" value="no"><span>No</span></label>
+          </fieldset>
+          <fieldset class="chips"><legend>Do you hold $FINNPUTER?</legend>
+            <label><input type="radio" name="holder" value="yes"><span>Yes</span></label>
+            <label><input type="radio" name="holder" value="no"><span>No</span></label>
+            <label><input type="radio" name="holder" value="na"><span>Prefer not to say</span></label>
+          </fieldset>
+          <p class="form__msg" id="moreMsg" role="alert"></p>
+          <button class="btn btn--full" type="submit" id="moreBtn">Save answers</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="band faq" id="faq">
+  <div class="wrap faq__grid">
+    <h2 class="h2" data-reveal>Questions.</h2>
+    <div class="faq__list" data-reveal>
+      <details><summary>What is FINNPUTER Card?</summary><p>An upcoming payment card that connects traditional money and supported digital assets with everyday card spending.</p></details>
+      <details><summary>Can I fund it with fiat?</summary><p>Yes, that is the plan. Bank transfer funding is planned next to supported digital assets, subject to the final card programme.</p></details>
+      <details><summary>Can I use USDC or USDT?</summary><p>Stablecoin funding is planned. Which coins and networks are supported depends on your region and is announced before launch.</p></details>
+      <details><summary>Is there a virtual card?</summary><p>Yes. A virtual and a physical card are planned, with a metal card to follow.</p></details>
+      <details><summary>Do I need to verify my identity?</summary><p>Yes. Identity verification is part of the card programme, as with any regulated payment card.</p></details>
+      <details><summary>Do I need to own $FINNPUTER?</summary><p>No. The card works without the token. Holding the token is planned to lower your service fee.</p></details>
+      <details><summary>Which countries will be supported?</summary><p>Country availability is announced once the card programme is approved. Your answer on the waitlist helps us push for your country.</p></details>
+      <details><summary>Can I use Apple Pay or Google Pay?</summary><p>Digital wallet support is planned where the card programme supports it.</p></details>
+      <details><summary>What will it cost?</summary><p>Pricing is announced before launch. Simple, transparent, no surprises.</p></details>
+      <details><summary>When does it launch?</summary><p>There is no date yet. The waitlist hears first.</p></details>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="foot__brand">FINNPUTER <span>Card</span></p>
+    <p class="foot__legal">FINNPUTER Card is currently in development. Features, pricing, supported assets, jurisdictions, card networks, limits and availability are subject to change and to approval of the card programme. Card services will be provided through appropriately authorised programme and issuing partners where applicable. FINNPUTER is not a bank and not a card issuer. Card images show a design preview.</p>
+    <p class="foot__links">
+      <a href="privacy.html">Privacy</a>
+      <a href="legal.html">Legal notice</a>
+      <a href="https://hub.finnputerdex.com" rel="noopener">FINNPUTER hub</a>
+      <a href="https://x.com/FINNPUTER28" rel="noopener">X</a>
+    </p>
+  </div>
+</footer>
+
+<script src="assets/config.js"></script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
