@@ -17,7 +17,7 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" href="assets/img/card-glow-1100.webp" imagesrcset="assets/img/card-glow-720.webp 720w, assets/img/card-glow-1100.webp 1100w, assets/img/card-glow-1672.webp 1672w" imagesizes="(min-width: 960px) 62vw, 130vw">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=4">
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -25,13 +25,17 @@
 
 <header class="nav" id="nav">
   <a class="nav__brand" href="#card" aria-label="FINNPUTER Card, back to top">FINNPUTER <span>Card</span></a>
-  <nav class="nav__links" aria-label="Sections">
-    <a href="#cards">Card</a>
+  <nav class="nav__links" id="navLinks" aria-label="Sections">
+    <a href="#cards">Cards</a>
     <a href="#how">How it works</a>
     <a href="#features">Features</a>
+    <a href="#token">Token</a>
     <a href="#faq">FAQ</a>
   </nav>
-  <a class="btn btn--small" href="#waitlist">Join the waitlist</a>
+  <div class="nav__end">
+    <a class="btn btn--small nav__cta" href="#waitlist">Join<span>&nbsp;the waitlist</span></a>
+    <button class="nav__menu" id="navMenu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><i></i><i></i></button>
+  </div>
 </header>
 
 <main>
@@ -54,7 +58,7 @@
       <a class="btn" href="#waitlist">Join the waitlist</a>
       <a class="btn btn--ghost" href="#how">See how it works</a>
     </div>
-    <p class="status"><span class="status__dot"></span><span class="shiny">Coming soon</span></p>
+    <p class="status"><span class="status__dot"></span><span class="shiny">Waitlist open</span><span class="status__count" id="heroCount" hidden></span></p>
   </div>
 </section>
 
@@ -187,10 +191,9 @@
         <p class="phone__label">Total balance</p>
         <p class="phone__total"><span data-count="8730" data-prefix="€" data-decimals="2">€8,730.00</span></p>
         <div class="mini" id="mini">
-          <img class="mini__img" alt="" loading="lazy" src="assets/img/card-glow-720.webp" width="720" height="405">
-          <span class="mini__num">•••• 2847</span>
-          <span class="mini__state">Active</span>
+          <img class="mini__img" alt="" loading="lazy" src="assets/img/card-glow-720.webp" srcset="assets/img/card-glow-720.webp 720w, assets/img/card-glow-1100.webp 1100w" sizes="440px" width="720" height="405">
         </div>
+        <p class="mini__meta"><span class="mini__num">•••• 2847</span><span class="mini__state">Active</span></p>
         <div class="phone__actions">
           <span>Add money</span><span>Card</span><span>Freeze</span><span>Limits</span>
         </div>
@@ -265,8 +268,14 @@
 <section class="band waitlist" id="waitlist">
   <div class="wrap waitlist__grid">
     <div class="waitlist__copy">
-      <h2 class="h2" data-reveal>Get on the list.</h2>
-      <p class="lead" data-reveal>Early access goes to the waitlist first. It also tells the card provider how many of us there are, which gets everyone better terms.</p>
+      <h2 class="h2" data-reveal>Get in line.</h2>
+      <p class="lead" data-reveal>The first cards go to the people on this list. Join and you get your number right away. Lower numbers go first.</p>
+      <ul class="ticks ticks--wide" data-reveal>
+        <li>Your number, the second you join</li>
+        <li>Pricing in your inbox before it goes public</li>
+        <li>Invite friends, move up and earn invite rewards</li>
+      </ul>
+      <p class="live" id="liveCount" hidden><b id="liveNum">0</b> people are already in line.</p>
     </div>
 
     <div class="form" data-reveal>
@@ -285,17 +294,32 @@
         </div>
         <label class="check">
           <input type="checkbox" id="consent" name="consent" required>
-          <span>FINNPUTER may store my answers and email me about the card. I can unsubscribe at any time. <a href="privacy.html">Privacy policy</a></span>
+          <span id="consentText">Yes, FINNPUTER may store my details and email me about the FINNPUTER Card: early access, launch, pricing and offers. I can unsubscribe at any time. <a href="privacy.html">Privacy policy</a></span>
         </label>
         <p class="form__msg" id="joinMsg" role="alert"></p>
         <button class="btn btn--full" type="submit" id="joinBtn">Join the waitlist</button>
       </form>
 
       <div class="done" id="done" hidden>
-        <h3 class="done__title">You're on the list.</h3>
+        <div class="place" id="place" hidden>
+          <p class="place__eyebrow">You're in. Your number</p>
+          <p class="place__num"><i>#</i><span id="placeNum">0</span></p>
+        </div>
+        <h3 class="done__title" id="doneTitle">You're on the list.</h3>
         <p class="done__sub" id="doneSub">We'll let you know when FINNPUTER Card is ready.</p>
+        <div class="invite" id="invite" hidden>
+          <h4 class="invite__title">Move up the list</h4>
+          <p class="invite__text">Every friend who joins with your link moves you up <b data-boost>10</b> places.</p>
+          <div class="invite__row">
+            <input id="inviteLink" type="text" readonly aria-label="Your invite link">
+            <button class="btn btn--small" type="button" id="inviteCopy">Copy</button>
+          </div>
+          <a class="btn btn--ghost btn--full" id="inviteX" href="#" target="_blank" rel="noopener">Share on X</a>
+          <p class="invite__stat" id="inviteStat" hidden></p>
+          <p class="invite__note">Every invite stays linked to you. Invite rewards are announced together with pricing.</p>
+        </div>
         <form id="moreForm" novalidate>
-          <p class="done__ask">Six quick questions. All optional. Your answers help us get better terms from the card provider.</p>
+          <p class="done__ask">Six quick questions. All optional. They help us build the card you actually want.</p>
           <fieldset class="chips"><legend>Which card do you want?</legend>
             <label><input type="radio" name="card_interest" value="virtual"><span>Virtual</span></label>
             <label><input type="radio" name="card_interest" value="physical"><span>Physical</span></label>
@@ -333,6 +357,7 @@
           <p class="form__msg" id="moreMsg" role="alert"></p>
           <button class="btn btn--full" type="submit" id="moreBtn">Save answers</button>
         </form>
+        <p class="done__reset"><button type="button" id="notMe">Not you? Use another email</button></p>
       </div>
     </div>
   </div>
@@ -351,8 +376,9 @@
       <details><summary>Do I need to own $FINNPUTER?</summary><p>No. The card works without the token. Holding the token is planned to lower your service fee.</p></details>
       <details><summary>Which countries will be supported?</summary><p>Country availability is announced once the card programme is approved. Your answer on the waitlist helps us push for your country.</p></details>
       <details><summary>Can I use Apple Pay or Google Pay?</summary><p>Digital wallet support is planned where the card programme supports it.</p></details>
-      <details><summary>What will it cost?</summary><p>Pricing is announced before launch. Simple, transparent, no surprises.</p></details>
+      <details><summary>What will it cost?</summary><p>Pricing is announced before launch. The waitlist sees it first.</p></details>
       <details><summary>When does it launch?</summary><p>There is no date yet. The waitlist hears first.</p></details>
+      <details><summary>How does the line work?</summary><p>You get a number when you join. Lower numbers get the card first. Every friend who joins with your link moves you up <span data-boost>10</span> places and stays linked to you. Invite rewards are announced together with pricing. Cards go out in number order, as each country opens.</p></details>
     </div>
   </div>
 </section>
@@ -373,6 +399,6 @@
 </footer>
 
 <script src="assets/config.js"></script>
-<script src="assets/app.js" defer></script>
+<script src="assets/app.js?v=4" defer></script>
 </body>
 </html>

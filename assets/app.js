@@ -9,9 +9,33 @@
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
   /* ---------- nav ---------- */
-  const nav = $('#nav');
-  const onNav = () => nav.classList.toggle('is-solid', scrollY > 40);
+  const nav = $('#nav'), navMenu = $('#navMenu');
+  const navLinks = $$('#navLinks a').map(a => ({ a, sec: $(a.getAttribute('href')) })).filter(l => l.sec);
+  let navY = scrollY;
+  const setMenu = open => {
+    nav.classList.toggle('is-open', open);
+    if (navMenu) navMenu.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  const onNav = () => {
+    const y = scrollY, d = y - navY;
+    nav.classList.toggle('is-solid', y > 40);
+    if (nav.classList.contains('is-open')) { if (Math.abs(d) > 30) setMenu(false); }
+    else if (y < 240 || d < -6) nav.classList.remove('is-away');
+    else if (d > 6) nav.classList.add('is-away');
+    if (Math.abs(d) > 6) navY = y;
+    const mid = innerHeight * 0.4;
+    navLinks.forEach(l => {
+      const r = l.sec.getBoundingClientRect();
+      if (r.top <= mid && r.bottom > mid) l.a.setAttribute('aria-current', 'true'); else l.a.removeAttribute('aria-current');
+    });
+  };
   addEventListener('scroll', onNav, { passive: true }); onNav();
+  if (navMenu) {
+    navMenu.addEventListener('click', e => { e.stopPropagation(); setMenu(!nav.classList.contains('is-open')); });
+    $$('#navLinks a, .nav__cta, .nav__brand').forEach(a => a.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('click', e => { if (!nav.contains(e.target)) setMenu(false); });
+    addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+  }
 
   /* ---------- reveals, staggered ---------- */
   $$('[data-stagger]').forEach(g => $$('[data-reveal]', g).forEach((el, i) => el.style.setProperty('--i', i)));
@@ -233,17 +257,38 @@
     }
   }
 
+  /* ---------- live numbers from the server: only real ones, hidden when there are none ---------- */
+  const num = n => new Intl.NumberFormat('en-US').format(n);
+  let boost = 10;
+  function applyHype(c) {
+    if (!c) return;
+    if (c.boost > 0) { boost = c.boost; $$('[data-boost]').forEach(el => { el.textContent = boost; }); }
+    if (c.count > 0) {
+      const hc = $('#heroCount'), live = $('#liveCount'), ln = $('#liveNum');
+      if (hc) { hc.textContent = num(c.count) + ' in line'; hc.hidden = false; }
+      if (live && ln) { ln.dataset.count = c.count; ln.textContent = num(c.count); live.hidden = false; cio.observe(ln); }
+    }
+  }
+
   /* ---------- server calls ---------- */
   const post = (path, body) => fetch(API + path, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), keepalive: true
   });
   const qs = new URLSearchParams(location.search);
-  const source = (qs.get('utm_source') || qs.get('ref') || '').slice(0, 60);
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  };
+  const CODE = /^[a-z0-9]{8}$/;
+  let invite = (qs.get('invite') || '').toLowerCase();
+  if (CODE.test(invite)) store.set('fc_inv', invite); else { invite = store.get('fc_inv'); if (!CODE.test(invite || '')) invite = ''; }
+  const source = (qs.get('utm_source') || qs.get('ref') || (qs.get('invite') ? 'invite' : '')).slice(0, 60);
   let refHost = '';
   try { if (document.referrer) refHost = new URL(document.referrer).hostname; } catch (e) {}
 
   if (API) {
-    fetch(API + '/api/config').then(r => r.ok ? r.json() : null).then(applyPricing).catch(() => {});
+    fetch(API + '/api/config').then(r => r.ok ? r.json() : null).then(c => { applyPricing(c); applyHype(c); }).catch(() => {});
     let seen = false;
     try { seen = sessionStorage.getItem('fc_hit') === '1'; sessionStorage.setItem('fc_hit', '1'); } catch (e) {}
     if (!seen) post('/api/hit', { source, referrer: refHost }).catch(() => {});
@@ -272,6 +317,66 @@
     return d.message || 'That did not save. Try again in a minute.';
   };
 
+  // place in line + invite link, shown after joining and again when the visitor comes back
+  const countTo = (el, end) => {
+    if (reduce || end < 2) { el.textContent = num(end); return; }
+    const t0 = performance.now(), dur = 1100;
+    const tick = t => {
+      const u = clamp((t - t0) / dur, 0, 1), e = 1 - Math.pow(1 - u, 4);
+      el.textContent = num(Math.max(1, Math.round(end * e)));
+      if (u < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  function showPlace(d, note) {
+    const place = $('#place'), inv = $('#invite'), sub = $('#doneSub');
+    if (d.boost > 0) { boost = d.boost; $$('[data-boost]').forEach(el => { el.textContent = boost; }); }
+    if (d.position > 0 && place) {
+      place.hidden = false; countTo($('#placeNum'), d.position);
+      sub.textContent = note || 'Lower numbers get the card first, as each country opens. We email you the moment you can order.';
+    } else if (note) sub.textContent = note;
+    if (d.ref && inv) {
+      const link = location.origin + location.pathname.replace(/index\.html$/, '') + '?invite=' + d.ref;
+      $('#inviteLink').value = link;
+      const text = (d.position > 0 ? `Got my number for the FINNPUTER Card: #${num(d.position)}.` : `I'm on the list for the FINNPUTER Card.`) + ' One card, fiat or crypto. Get yours:';
+      $('#inviteX').href = 'https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(link);
+      const stat = $('#inviteStat');
+      if (d.invites > 0) { stat.textContent = `${num(d.invites)} ${d.invites === 1 ? 'friend has' : 'friends have'} joined with your link.`; stat.hidden = false; }
+      else stat.hidden = true;
+      inv.hidden = false;
+    }
+  }
+  const copyBtn = $('#inviteCopy');
+  if (copyBtn) copyBtn.addEventListener('click', async () => {
+    const inp = $('#inviteLink');
+    try { await navigator.clipboard.writeText(inp.value); }
+    catch (e) { inp.select(); try { document.execCommand('copy'); } catch (e2) {} }
+    copyBtn.textContent = 'Copied'; setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1600);
+  });
+  const linkInp = $('#inviteLink');
+  if (linkInp) linkInp.addEventListener('focus', () => linkInp.select());
+  const notMe = $('#notMe');
+  if (notMe) notMe.addEventListener('click', () => {
+    store.del('fc_me'); token = '';
+    done.hidden = true; join.hidden = false; join.reset();
+    ['#place', '#invite'].forEach(q => { const el = $(q); if (el) el.hidden = true; });
+    more.hidden = false; join.email.focus();
+  });
+
+  // returning visitor: show their place instead of an empty form
+  const me = store.get('fc_me');
+  if (API && join && me && CODE.test(me.ref || '')) {
+    fetch(API + '/api/waitlist/status?ref=' + me.ref).then(async r => {
+      if (r.status === 404) { store.del('fc_me'); return; }
+      if (!r.ok) return;
+      const d = await r.json();
+      token = me.token || '';
+      join.hidden = true; done.hidden = false;
+      if (!token || me.answered) more.hidden = true;
+      showPlace({ ...d, ref: me.ref });
+    }).catch(() => {});
+  }
+
   if (join) join.addEventListener('submit', async e => {
     e.preventDefault();
     const msg = $('#joinMsg'), btn = $('#joinBtn');
@@ -285,13 +390,17 @@
     if (!API) { say(msg, 'The waitlist is not connected yet.'); return; }
     say(msg, ''); btn.disabled = true; btn.textContent = 'Joining';
     try {
-      const r = await post('/api/waitlist', { email, country, consent: true, website: join.website.value, source, referrer: refHost });
+      const ct = $('#consentText');
+      const r = await post('/api/waitlist', { email, country, consent: true, consent_text: ct ? ct.textContent.replace(/\s+/g, ' ').trim() : '', website: join.website.value, source, referrer: refHost, invite });
       if (!r.ok) { say(msg, await failText(r)); return; }
       const d = await r.json();
       token = d.token || '';
       join.hidden = true; done.hidden = false;
-      if (d.already) $('#doneSub').textContent = 'This email is already on the list. We will let you know when FINNPUTER Card is ready.';
-      else if (d.confirm) $('#doneSub').textContent = 'One more step: open the email we just sent and confirm your address.';
+      let note = '';
+      if (d.already) note = d.position > 0 ? 'This email is already on the list. This is your number.' : 'This email is already on the list. We will let you know when FINNPUTER Card is ready.';
+      else if (d.confirm) note = 'One more step: open the email we just sent and confirm your address.';
+      showPlace(d, note);
+      if (d.ref) { store.set('fc_me', { ref: d.ref, token }); store.del('fc_inv'); }
       if (!token) more.hidden = true;
       done.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
     } catch (err) {
@@ -314,6 +423,7 @@
       const r = await post('/api/waitlist/details', body);
       if (!r.ok) { say(msg, await failText(r)); btn.disabled = false; btn.textContent = 'Save answers'; return; }
       btn.textContent = 'Answers saved'; say(msg, 'Saved. Thank you.', true);
+      const m = store.get('fc_me'); if (m) store.set('fc_me', { ...m, answered: true });
     } catch (err) {
       say(msg, 'Could not reach the server. Check your connection and try again.');
       btn.disabled = false; btn.textContent = 'Save answers';
