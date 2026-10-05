@@ -151,6 +151,7 @@ button,input,select{font:inherit;color:inherit}
 .ticks--wide{margin-top:1.6em;gap:10px;font-size:1rem}
 .tag{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border:1px solid rgba(61,242,160,.4);color:var(--mint);border-radius:999px}
 .tag--gold{border-color:rgba(223,160,81,.5);color:var(--gold)}
+.pane__cta{margin-top:14px}
 @media (min-width:960px){
   .showcase__pin{padding-top:40px}
   .showcase__head,.showcase__info{padding-left:calc(var(--gutter) + min(58vw,700px))}
