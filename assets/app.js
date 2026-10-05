@@ -307,6 +307,48 @@
     sel.appendChild(frag);
   }
 
+  /* ---------- the line: example of moving up ---------- */
+  const queue = $('#queue');
+  if (queue) {
+    const N = 30, FROM = 22, TO = 12, START = 58;
+    const track = $('#queueTrack'), you = $('#queueYou'), qn = $('#queueNum');
+    track.style.setProperty('--n', N);
+    const ticks = [];
+    for (let i = 0; i < N; i++) { const t = document.createElement('i'); track.insertBefore(t, you); ticks.push(t); }
+    const place = (i, n) => { track.style.setProperty('--i', i); qn.textContent = n; };
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    let live = false, running = false;
+    const cycle = async () => {
+      if (running) return; running = true;
+      while (live) {
+        queue.classList.add('is-reset'); queue.classList.remove('is-friend');
+        ticks.forEach(t => t.classList.remove('is-hit')); place(FROM, START);
+        void track.offsetWidth; queue.classList.remove('is-reset');
+        await wait(1700); if (!live) break;
+        queue.classList.add('is-friend');
+        await wait(650); if (!live) break;
+        track.style.setProperty('--i', TO);
+        const t0 = performance.now(), dur = 1500, steps = FROM - TO;
+        await new Promise(done => {
+          const tick = t => {
+            const u = clamp((t - t0) / dur, 0, 1), e = 1 - Math.pow(1 - u, 3), k = Math.round(steps * e);
+            qn.textContent = START - k;
+            for (let j = 0; j < k; j++) ticks[FROM - 1 - j].classList.add('is-hit');
+            if (u < 1 && live) requestAnimationFrame(tick); else done();
+          };
+          requestAnimationFrame(tick);
+        });
+        await wait(3200);
+      }
+      running = false;
+    };
+    if (reduce) { queue.classList.add('is-reset', 'is-friend'); place(TO, START - (FROM - TO)); for (let j = TO; j < FROM; j++) ticks[j].classList.add('is-hit'); }
+    else {
+      place(FROM, START);
+      new IntersectionObserver(es => es.forEach(e => { live = e.isIntersecting; if (live) cycle(); }), { threshold: 0.35 }).observe(queue);
+    }
+  }
+
   /* ---------- waitlist ---------- */
   const join = $('#joinForm'), more = $('#moreForm'), done = $('#done');
   let token = '';
@@ -340,6 +382,9 @@
       $('#inviteLink').value = link;
       const text = (d.position > 0 ? `Got my number for the FINNPUTER Card: #${num(d.position)}.` : `I'm on the list for the FINNPUTER Card.`) + ' One card, fiat or crypto. Get yours:';
       $('#inviteX').href = 'https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(link);
+      const tg = $('#inviteTg'), wa = $('#inviteWa');
+      if (tg) tg.href = 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text);
+      if (wa) wa.href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + link);
       const stat = $('#inviteStat');
       if (d.invites > 0) { stat.textContent = `${num(d.invites)} ${d.invites === 1 ? 'friend has' : 'friends have'} joined with your link.`; stat.hidden = false; }
       else stat.hidden = true;
@@ -377,6 +422,25 @@
     }).catch(() => {});
   }
 
+  // visitor arrived through a friend's invite link: say so, once the code is known to be real
+  const guest = $('#guest'), formGuest = $('#formGuest');
+  const hideGuest = () => { if (guest) guest.classList.add('is-away'); };
+  if (API && invite && !(me && me.ref) && guest) {
+    fetch(API + '/api/waitlist/status?ref=' + invite).then(r => {
+      if (r.status === 404) { store.del('fc_inv'); invite = ''; return; }
+      if (!r.ok) return;
+      if (formGuest) formGuest.hidden = false;
+      let closed = false; try { closed = sessionStorage.getItem('fc_guest') === '0'; } catch (e) {}
+      if (closed) return;
+      guest.classList.add('is-away'); guest.hidden = false;
+      requestAnimationFrame(() => requestAnimationFrame(() => guest.classList.remove('is-away')));
+      const wl = $('#waitlist');
+      if (wl) new IntersectionObserver(es => es.forEach(e => guest.classList.toggle('is-away', e.isIntersecting)), { threshold: 0.2 }).observe(wl);
+    }).catch(() => {});
+    const gx = $('#guestX');
+    if (gx) gx.addEventListener('click', () => { hideGuest(); guest.hidden = true; try { sessionStorage.setItem('fc_guest', '0'); } catch (e) {} });
+  }
+
   if (join) join.addEventListener('submit', async e => {
     e.preventDefault();
     const msg = $('#joinMsg'), btn = $('#joinBtn');
@@ -401,6 +465,7 @@
       else if (d.confirm) note = 'One more step: open the email we just sent and confirm your address.';
       showPlace(d, note);
       if (d.ref) { store.set('fc_me', { ref: d.ref, token }); store.del('fc_inv'); }
+      if (guest) guest.hidden = true;
       if (!token) more.hidden = true;
       done.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
     } catch (err) {

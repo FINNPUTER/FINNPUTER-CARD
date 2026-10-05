@@ -17,7 +17,7 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" href="assets/img/card-glow-1100.webp" imagesrcset="assets/img/card-glow-720.webp 720w, assets/img/card-glow-1100.webp 1100w, assets/img/card-glow-1672.webp 1672w" imagesizes="(min-width: 960px) 62vw, 130vw">
-<link rel="stylesheet" href="assets/styles.css?v=5">
+<link rel="stylesheet" href="assets/styles.css?v=6">
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -134,7 +134,7 @@
           <ul class="ticks">
             <li>Everything the physical card does</li>
             <li>Real metal, real weight</li>
-            <li>The first batch goes to the waitlist</li>
+            <li>The first batch goes out in number order</li>
           </ul>
           <p class="tag tag--gold">Limited first batch</p>
           <p class="pane__cta"><a class="btn btn--gold btn--small" href="#waitlist">Reserve yours</a></p>
@@ -155,7 +155,7 @@
   </div>
   <div class="wrap metal__copy">
     <h2 class="h2 h2--gold" data-reveal>The one you put on the table.</h2>
-    <p class="lead" data-reveal>FINNPUTER Metal is planned as a limited first batch. Tell us on the waitlist that you want one. We order when enough people do.</p>
+    <p class="lead" data-reveal>FINNPUTER Metal is planned as a limited first batch. It goes out in number order, so a low number on the waitlist is how you get one.</p>
     <a class="btn btn--gold" href="#waitlist" data-reveal>Reserve a metal card</a>
   </div>
 </section>
@@ -264,6 +264,31 @@
   </div>
 </section>
 
+<!-- THE LINE -->
+<section class="band line" id="line">
+  <div class="wrap">
+    <h2 class="h2" data-reveal>Low number. <em>First card.</em></h2>
+    <p class="lead" data-reveal>Everyone on the list gets a number. Cards go out in that order. Bring a friend and you jump ahead.</p>
+
+    <div class="queue" id="queue" data-reveal role="img" aria-label="Example: a friend joins with your link and you move up 10 places, from number 58 to number 48">
+      <div class="queue__top">
+        <p class="queue__tag">Example</p>
+        <p class="queue__toast" id="queueToast">+1 friend joined</p>
+      </div>
+      <p class="queue__num"><i>#</i><span id="queueNum">58</span></p>
+      <div class="queue__track" id="queueTrack"><span class="queue__you" id="queueYou"><b>You</b></span></div>
+      <p class="queue__ends"><span>Front of the line</span><span>Back</span></p>
+    </div>
+
+    <div class="spots spots--3" data-stagger>
+      <article class="spot" data-reveal><span class="spot__n">01</span><h3>First in line</h3><p>Cards go out in number order, as each country opens. The lower your number, the sooner you can order.</p></article>
+      <article class="spot spot--gold" data-reveal><span class="spot__n">02</span><h3>First pick of metal</h3><p>The first metal batch is limited. It goes out in number order too.</p></article>
+      <article class="spot" data-reveal><span class="spot__n">03</span><h3>Invites that stay yours</h3><p>Every friend who joins with your link moves you up <span data-boost>10</span> places and stays linked to you. Invite rewards are announced together with pricing.</p></article>
+    </div>
+    <p class="line__cta" data-reveal><a class="btn" href="#waitlist">Get my number</a><a class="line__rules" href="rules.html">Waitlist rules</a></p>
+  </div>
+</section>
+
 <!-- WAITLIST -->
 <section class="band waitlist" id="waitlist">
   <div class="wrap waitlist__grid">
@@ -280,6 +305,7 @@
 
     <div class="form" data-reveal>
       <form id="joinForm" novalidate>
+        <p class="form__guest" id="formGuest" hidden>A friend invited you. Your signup moves them up <span data-boost>10</span> places.</p>
         <div class="field">
           <label for="email">Email</label>
           <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com">
@@ -314,9 +340,13 @@
             <input id="inviteLink" type="text" readonly aria-label="Your invite link">
             <button class="btn btn--small" type="button" id="inviteCopy">Copy</button>
           </div>
-          <a class="btn btn--ghost btn--full" id="inviteX" href="#" target="_blank" rel="noopener">Share on X</a>
+          <div class="invite__share">
+            <a class="btn btn--ghost" id="inviteX" href="#" target="_blank" rel="noopener">X</a>
+            <a class="btn btn--ghost" id="inviteTg" href="#" target="_blank" rel="noopener">Telegram</a>
+            <a class="btn btn--ghost" id="inviteWa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+          </div>
           <p class="invite__stat" id="inviteStat" hidden></p>
-          <p class="invite__note">Every invite stays linked to you. Invite rewards are announced together with pricing.</p>
+          <p class="invite__note">Every invite stays linked to you. Invite rewards are announced together with pricing. <a href="rules.html">Waitlist rules</a></p>
         </div>
         <form id="moreForm" novalidate>
           <p class="done__ask">Six quick questions. All optional. They help us build the card you actually want.</p>
@@ -378,7 +408,7 @@
       <details><summary>Can I use Apple Pay or Google Pay?</summary><p>Digital wallet support is planned where the card programme supports it.</p></details>
       <details><summary>What will it cost?</summary><p>Pricing is announced before launch. The waitlist sees it first.</p></details>
       <details><summary>When does it launch?</summary><p>There is no date yet. The waitlist hears first.</p></details>
-      <details><summary>How does the line work?</summary><p>You get a number when you join. Lower numbers get the card first. Every friend who joins with your link moves you up <span data-boost>10</span> places and stays linked to you. Invite rewards are announced together with pricing. Cards go out in number order, as each country opens.</p></details>
+      <details><summary>How does the line work?</summary><p>You get a number when you join. Lower numbers get the card first. Every friend who joins with your link moves you up <span data-boost>10</span> places and stays linked to you. Invite rewards are announced together with pricing. Cards go out in number order, as each country opens. The limited first metal batch goes out in number order too. The details are in the <a href="rules.html">waitlist rules</a>.</p></details>
     </div>
   </div>
 </section>
@@ -390,6 +420,7 @@
     <p class="foot__brand">FINNPUTER <span>Card</span></p>
     <p class="foot__legal">FINNPUTER Card is currently in development. Features, pricing, supported assets, jurisdictions, card networks, limits and availability are subject to change and to approval of the card programme. Card services will be provided through appropriately authorised programme and issuing partners where applicable. FINNPUTER is not a bank and not a card issuer. Card images show a design preview.</p>
     <p class="foot__links">
+      <a href="rules.html">Waitlist rules</a>
       <a href="privacy.html">Privacy</a>
       <a href="legal.html">Legal notice</a>
       <a href="https://hub.finnputerdex.com" rel="noopener">FINNPUTER hub</a>
@@ -398,7 +429,13 @@
   </div>
 </footer>
 
+<aside class="guest" id="guest" hidden aria-live="polite">
+  <p><b>A friend invited you.</b> Join with this link and they move up <span data-boost>10</span> places.</p>
+  <a class="btn btn--small" href="#waitlist" id="guestGo">Get my number</a>
+  <button type="button" id="guestX" aria-label="Close">&times;</button>
+</aside>
+
 <script src="assets/config.js"></script>
-<script src="assets/app.js?v=5" defer></script>
+<script src="assets/app.js?v=6" defer></script>
 </body>
 </html>
