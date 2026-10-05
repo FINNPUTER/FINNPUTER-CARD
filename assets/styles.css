@@ -275,6 +275,7 @@ button,input,select{font:inherit;color:inherit}
 .check a{color:var(--bone)}
 .form__msg{min-height:0;font-size:.88rem;color:#ff9a8a;margin:0 0 12px}
 .form__msg:empty{display:none}
+.form__fine{margin-top:14px;text-align:center;max-width:none}
 .form__msg.is-ok{color:var(--mint)}
 .status__count{color:var(--dim)}
 .status__count::before{content:"/";margin-right:10px;opacity:.5}

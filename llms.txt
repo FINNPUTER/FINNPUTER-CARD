@@ -1,0 +1,75 @@
+# FINNPUTER Card
+
+> FINNPUTER Card is a payment card in development from the FINNPUTER ecosystem. It is planned to be funded with euros, dollars or supported stablecoins and used like any other payment card, online and in store. The card is not available yet. A waitlist is open at https://card.finnputerdex.com/.
+
+## Key facts
+
+- Status: in development. There is no launch date and no published pricing yet.
+- Planned versions: a virtual card, a physical card and a limited metal card.
+- Planned funding: bank transfer in EUR and USD, and supported stablecoins such as USDC and USDT where available.
+- Identity verification is required when ordering the card. It is part of the card programme, as with any regulated payment card. Joining the waitlist needs only an email address and a country.
+- FINNPUTER is not a bank and not a card issuer. Card services will be provided through authorised programme and issuing partners.
+- The card works without the $FINNPUTER token. Holding the token is planned to lower the service fee. A lower fee is a discount on the product, not a return on the token.
+- Features, pricing, supported assets, countries, card networks and limits can change and depend on approval of the card programme.
+
+## How the waitlist works
+
+- Joining needs an email address and a country of residence.
+- Everyone gets a number. Numbers are handed out in the order people join. Lower numbers get the card first, as each country opens.
+- The limited first metal batch goes out in number order too.
+- Every member has a personal invite link. Every friend who joins with that link moves the member up 10 places and stays linked to them. Invite rewards are announced together with pricing.
+- A number is a place in line. It is not a card, not a contract and not a promise that the card will be offered in a given country.
+
+## Pages
+
+- [FINNPUTER Card](https://card.finnputerdex.com/): product overview, the three cards, how it works, token tiers, waitlist and questions
+- [Waitlist rules](https://card.finnputerdex.com/rules.html): numbers, invites, fair play, leaving
+- [Privacy](https://card.finnputerdex.com/privacy.html): what is stored and why
+- [Legal notice](https://card.finnputerdex.com/legal.html): operator and contact
+
+## Questions and answers
+
+### What is FINNPUTER Card?
+FINNPUTER Card is a payment card in development from the FINNPUTER ecosystem. The plan: you fund it with euros, dollars or supported stablecoins and pay with it like with any other card, online and in store. A virtual, a physical and a metal card are planned.
+
+### Can I get the card now?
+Not yet. The card is in development and there is no launch date. You can join the waitlist today, get your number and hear first when ordering opens.
+
+### Who is behind FINNPUTER Card?
+FINNPUTER, the project behind the $FINNPUTER token on Solana and its analysis and trading tools. FINNPUTER is not a bank and not a card issuer. Card services will be provided through authorised programme and issuing partners.
+
+### Can I fund it with fiat?
+Yes, that is the plan. Bank transfer funding is planned next to supported digital assets, subject to the final card programme.
+
+### Can I use USDC or USDT?
+Stablecoin funding is planned. Which coins and networks are supported depends on your region and is announced before launch.
+
+### Is there a virtual card?
+Yes. A virtual and a physical card are planned, with a metal card to follow.
+
+### Do I need to verify my identity?
+Yes, when you order the card. Identity verification is part of the card programme, as with any regulated payment card. Joining the waitlist needs only your email address and your country.
+
+### Do I need to own $FINNPUTER?
+No. The card works without the token. Holding the token is planned to lower your service fee.
+
+### Which countries will be supported?
+Country availability is announced once the card programme is approved. Your answer on the waitlist helps us push for your country.
+
+### Can I use Apple Pay or Google Pay?
+Digital wallet support is planned where the card programme supports it.
+
+### What will it cost?
+Pricing is announced before launch. The waitlist sees it first.
+
+### When does it launch?
+There is no date yet. The waitlist hears first.
+
+### How does the line work?
+You get a number when you join. Lower numbers get the card first. Every friend who joins with your link moves you up 10 places and stays linked to you. Invite rewards are announced together with pricing. Cards go out in number order, as each country opens. The limited first metal batch goes out in number order too. The details are in the waitlist rules.
+
+## Contact
+
+- Email: finnputer@proton.me
+- X: https://x.com/FINNPUTER28
+- FINNPUTER ecosystem: https://hub.finnputerdex.com/
