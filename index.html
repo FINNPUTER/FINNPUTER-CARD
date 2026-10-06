@@ -40,7 +40,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://card.finnputerdex.com/#org","name":"FINNPUTER","url":"https://hub.finnputerdex.com/","logo":{"@type":"ImageObject","url":"https://card.finnputerdex.com/assets/img/icon-512.png","width":512,"height":512},"sameAs":["https://x.com/FINNPUTER28"],"email":"finnputer@proton.me"},{"@type":"WebSite","@id":"https://card.finnputerdex.com/#site","url":"https://card.finnputerdex.com/","name":"FINNPUTER Card","inLanguage":"en","publisher":{"@id":"https://card.finnputerdex.com/#org"}},{"@type":"WebPage","@id":"https://card.finnputerdex.com/#page","url":"https://card.finnputerdex.com/","name":"FINNPUTER Card: One Card for Fiat and Crypto | Waitlist","description":"FINNPUTER Card is a payment card in development. Fund it with euros, dollars or supported stablecoins, spend with one card. Join the waitlist for your number.","inLanguage":"en","isPartOf":{"@id":"https://card.finnputerdex.com/#site"},"about":{"@id":"https://card.finnputerdex.com/#card"},"primaryImageOfPage":{"@type":"ImageObject","url":"https://card.finnputerdex.com/assets/img/card-glow-og.jpg","width":1200,"height":675},"dateModified":"2026-10-05"},{"@type":"Service","@id":"https://card.finnputerdex.com/#card","name":"FINNPUTER Card","serviceType":"Payment card (in development)","description":"A payment card in development that is planned to be funded with euros, dollars or supported stablecoins. Virtual, physical and metal versions are planned. Not available yet. A waitlist is open.","provider":{"@id":"https://card.finnputerdex.com/#org"},"url":"https://card.finnputerdex.com/","image":"https://card.finnputerdex.com/assets/img/card-glow-og.jpg"},{"@type":"FAQPage","@id":"https://card.finnputerdex.com/#faq","mainEntity":[{"@type":"Question","name":"What is FINNPUTER Card?","acceptedAnswer":{"@type":"Answer","text":"FINNPUTER Card is a payment card in development from the FINNPUTER ecosystem. The plan: you fund it with euros, dollars or supported stablecoins and pay with it like with any other card, online and in store. A virtual, a physical and a metal card are planned."}},{"@type":"Question","name":"Can I get the card now?","acceptedAnswer":{"@type":"Answer","text":"Not yet. The card is in development and there is no launch date. You can join the waitlist today, get your number and hear first when ordering opens."}},{"@type":"Question","name":"Who is behind FINNPUTER Card?","acceptedAnswer":{"@type":"Answer","text":"FINNPUTER, the project behind the $FINNPUTER token on Solana and its analysis and trading tools. FINNPUTER is not a bank and not a card issuer. Card services will be provided through authorised programme and issuing partners."}},{"@type":"Question","name":"Can I fund it with fiat?","acceptedAnswer":{"@type":"Answer","text":"Yes, that is the plan. Bank transfer funding is planned next to supported digital assets, subject to the final card programme."}},{"@type":"Question","name":"Can I use USDC or USDT?","acceptedAnswer":{"@type":"Answer","text":"Stablecoin funding is planned. Which coins and networks are supported depends on your region and is announced before launch."}},{"@type":"Question","name":"Is there a virtual card?","acceptedAnswer":{"@type":"Answer","text":"Yes. A virtual and a physical card are planned, with a metal card to follow."}},{"@type":"Question","name":"Do I need to verify my identity?","acceptedAnswer":{"@type":"Answer","text":"Yes, when you order the card. Identity verification is part of the card programme, as with any regulated payment card. Joining the waitlist needs only your email address and your country."}},{"@type":"Question","name":"Do I need to own $FINNPUTER?","acceptedAnswer":{"@type":"Answer","text":"No. The card works without the token. Holding the token is planned to lower your service fee."}},{"@type":"Question","name":"Which countries will be supported?","acceptedAnswer":{"@type":"Answer","text":"Country availability is announced once the card programme is approved. Your answer on the waitlist helps us push for your country."}},{"@type":"Question","name":"Can I use Apple Pay or Google Pay?","acceptedAnswer":{"@type":"Answer","text":"Digital wallet support is planned where the card programme supports it."}},{"@type":"Question","name":"What will it cost?","acceptedAnswer":{"@type":"Answer","text":"Pricing is announced before launch. The waitlist sees it first."}},{"@type":"Question","name":"When does it launch?","acceptedAnswer":{"@type":"Answer","text":"There is no date yet. The waitlist hears first."}},{"@type":"Question","name":"How does the line work?","acceptedAnswer":{"@type":"Answer","text":"You get a number when you join. Lower numbers get the card first. Every friend who joins with your link moves you up 10 places and stays linked to you. Invite rewards are announced together with pricing. Cards go out in number order, as each country opens. The limited first metal batch goes out in number order too. The details are in the waitlist rules."}}],"isPartOf":{"@id":"https://card.finnputerdex.com/#page"}}]}</script>
 <link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" href="assets/img/card-glow-1100.webp" imagesrcset="assets/img/card-glow-720.webp 720w, assets/img/card-glow-1100.webp 1100w, assets/img/card-glow-1672.webp 1672w" imagesizes="(min-width: 960px) 62vw, 130vw">
-<link rel="stylesheet" href="assets/styles.css?v=7">
+<link rel="stylesheet" href="assets/styles.css?v=8">
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -308,6 +308,18 @@
       <article class="spot spot--gold" data-reveal><span class="spot__n">02</span><h3>First pick of metal</h3><p>The first metal batch is limited. It goes out in number order too.</p></article>
       <article class="spot" data-reveal><span class="spot__n">03</span><h3>Invites that stay yours</h3><p>Every friend who joins with your link moves you up <span data-boost>10</span> places and stays linked to you. Invite rewards are announced together with pricing.</p></article>
     </div>
+    <div class="moves" id="moves" hidden>
+      <h3 class="moves__h">Already with FINNPUTER Trade?</h3>
+      <p class="moves__lead">Join through the bot and your status there moves you up here.</p>
+      <ul class="moves__list">
+        <li><b>Premium member</b><span><i data-bot="premium">30</i> places up</span></li>
+        <li><b>Minimum $FINNPUTER in your bot wallet</b><span><i data-bot="holder">20</i> places up</span></li>
+        <li><b>Every Premium member you bring</b><span><i data-bot="premiumRef">15</i> extra places</span></li>
+        <li class="is-gold"><b><i data-bot="metalSlot">10</i> Premium members brought</b><span>Reserved place in the first metal batch</span></li>
+        <li class="is-gold"><b><i data-bot="metalFree">25</i> Premium members brought</b><span>Metal card, no card price</span></li>
+      </ul>
+      <p class="moves__cta"><a class="btn btn--small" id="botLink" href="https://t.me/FinnputerTradeBot" target="_blank" rel="noopener">Open the bot</a><span class="fine">Tap Card waitlist in the bot. Your status is checked there and again before cards go out.</span></p>
+    </div>
     <p class="line__cta" data-reveal><a class="btn" href="#waitlist">Get my number</a><a class="line__rules" href="rules.html">Waitlist rules</a></p>
   </div>
 </section>
@@ -357,6 +369,7 @@
         </div>
         <h3 class="done__title" id="doneTitle">You're on the list.</h3>
         <p class="done__sub" id="doneSub">We'll let you know when FINNPUTER Card is ready.</p>
+        <p class="perk" id="perkStat" hidden></p>
         <div class="invite" id="invite" hidden>
           <h4 class="invite__title">Move up the list</h4>
           <p class="invite__text">Every friend who joins with your link moves you up <b data-boost>10</b> places.</p>
@@ -370,6 +383,7 @@
             <a class="btn btn--ghost" id="inviteWa" href="#" target="_blank" rel="noopener">WhatsApp</a>
           </div>
           <p class="invite__stat" id="inviteStat" hidden></p>
+          <p class="invite__stat" id="premStat" hidden></p>
           <p class="invite__note">Every invite stays linked to you. Invite rewards are announced together with pricing. <a href="rules.html">Waitlist rules</a></p>
         </div>
         <form id="moreForm" novalidate>
@@ -462,6 +476,6 @@
 </aside>
 
 <script src="assets/config.js"></script>
-<script src="assets/app.js?v=6" defer></script>
+<script src="assets/app.js?v=7" defer></script>
 </body>
 </html>

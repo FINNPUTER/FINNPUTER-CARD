@@ -263,6 +263,12 @@
   function applyHype(c) {
     if (!c) return;
     if (c.boost > 0) { boost = c.boost; $$('[data-boost]').forEach(el => { el.textContent = boost; }); }
+    const mv = $('#moves');
+    if (c.bot && mv) {                                                // only once the bot hands out links
+      $$('[data-bot]', mv).forEach(el => { const v = c.bot[el.dataset.bot]; if (v > 0) el.textContent = num(v); });
+      const bl = $('#botLink'); if (bl && /^https:\/\/t\.me\//.test(c.bot.url || '')) bl.href = c.bot.url;
+      mv.hidden = false;
+    }
     if (c.count > 0) {
       const hc = $('#heroCount'), live = $('#liveCount'), ln = $('#liveNum');
       if (hc) { hc.textContent = num(c.count) + ' in line'; hc.hidden = false; }
@@ -283,7 +289,14 @@
   const CODE = /^[a-z0-9]{8}$/;
   let invite = (qs.get('invite') || '').toLowerCase();
   if (CODE.test(invite)) store.set('fc_inv', invite); else { invite = store.get('fc_inv'); if (!CODE.test(invite || '')) invite = ''; }
-  const source = (qs.get('utm_source') || qs.get('ref') || (qs.get('invite') ? 'invite' : '')).slice(0, 60);
+  // signed link from the FINNPUTER Trade bot: kept until the visitor joins, and taken out of the address bar so it is not shared by accident
+  const BOT = /^[A-Za-z0-9_-]{20,500}\.[A-Za-z0-9_-]{20,100}$/;
+  let bot = qs.get('bot') || '';
+  if (BOT.test(bot)) {
+    store.set('fc_bot', bot);
+    try { const u = new URL(location.href); u.searchParams.delete('bot'); history.replaceState(null, '', u.pathname + u.search + u.hash); } catch (e) {}
+  } else { bot = store.get('fc_bot'); if (!BOT.test(bot || '')) bot = ''; }
+  const source = (qs.get('utm_source') || qs.get('ref') || (qs.get('bot') ? 'bot' : qs.get('invite') ? 'invite' : '')).slice(0, 60);
   let refHost = '';
   try { if (document.referrer) refHost = new URL(document.referrer).hostname; } catch (e) {}
 
@@ -377,6 +390,14 @@
       place.hidden = false; countTo($('#placeNum'), d.position);
       sub.textContent = note || 'Lower numbers get the card first, as each country opens. We email you the moment you can order.';
     } else if (note) sub.textContent = note;
+    const pk = $('#perkStat');
+    if (pk) {
+      const who = d.perks ? [d.perks.premium ? 'Premium member' : '', d.perks.holder ? '$FINNPUTER holder' : ''].filter(Boolean) : [];
+      let t = who.length && d.perks.places > 0 ? `${who.join(' and ')}: ${num(d.perks.places)} places added.` : '';
+      if (d.bot === 'used') t = 'This Telegram account is already linked to another entry on the list.';
+      if (d.bot === 'kept') t = 'This entry is already linked to another Telegram account.';
+      pk.textContent = t; pk.hidden = !t;
+    }
     if (d.ref && inv) {
       const link = location.origin + location.pathname.replace(/index\.html$/, '') + '?invite=' + d.ref;
       $('#inviteLink').value = link;
@@ -388,6 +409,14 @@
       const stat = $('#inviteStat');
       if (d.invites > 0) { stat.textContent = `${num(d.invites)} ${d.invites === 1 ? 'friend has' : 'friends have'} joined with your link.`; stat.hidden = false; }
       else stat.hidden = true;
+      const ps = $('#premStat');
+      if (ps) {
+        if (d.premiumInvites > 0) {
+          ps.textContent = `${num(d.premiumInvites)} Premium ${d.premiumInvites === 1 ? 'member' : 'members'} joined through you.` +
+            (d.partner === 'metal_free' ? ' Your metal card comes without the card price.' : d.partner === 'metal_slot' ? ' You have a reserved place in the first metal batch.' : '');
+          ps.hidden = false;
+        } else ps.hidden = true;
+      }
       inv.hidden = false;
     }
   }
@@ -414,8 +443,14 @@
     fetch(API + '/api/waitlist/status?ref=' + me.ref).then(async r => {
       if (r.status === 404) { store.del('fc_me'); return; }
       if (!r.ok) return;
-      const d = await r.json();
+      let d = await r.json();
       token = me.token || '';
+      if (bot && token) {                                             // already on the list and now arriving from the bot: add the status to this entry
+        try {
+          const l = await post('/api/waitlist/link', { ref: me.ref, token, bot });
+          if (l.ok) { d = await l.json(); store.del('fc_bot'); bot = ''; }
+        } catch (e) {}
+      }
       join.hidden = true; done.hidden = false;
       if (!token || me.answered) more.hidden = true;
       showPlace({ ...d, ref: me.ref });
@@ -455,7 +490,7 @@
     say(msg, ''); btn.disabled = true; btn.textContent = 'Joining';
     try {
       const ct = $('#consentText');
-      const r = await post('/api/waitlist', { email, country, consent: true, consent_text: ct ? ct.textContent.replace(/\s+/g, ' ').trim() : '', website: join.website.value, source, referrer: refHost, invite });
+      const r = await post('/api/waitlist', { email, country, consent: true, consent_text: ct ? ct.textContent.replace(/\s+/g, ' ').trim() : '', website: join.website.value, source, referrer: refHost, invite, bot: bot || undefined });
       if (!r.ok) { say(msg, await failText(r)); return; }
       const d = await r.json();
       token = d.token || '';
@@ -464,7 +499,7 @@
       if (d.already) note = d.position > 0 ? 'This email is already on the list. This is your number.' : 'This email is already on the list. We will let you know when FINNPUTER Card is ready.';
       else if (d.confirm) note = 'One more step: open the email we just sent and confirm your address.';
       showPlace(d, note);
-      if (d.ref) { store.set('fc_me', { ref: d.ref, token }); store.del('fc_inv'); }
+      if (d.ref) { store.set('fc_me', { ref: d.ref, token }); store.del('fc_inv'); store.del('fc_bot'); bot = ''; }
       if (guest) guest.hidden = true;
       if (!token) more.hidden = true;
       done.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
