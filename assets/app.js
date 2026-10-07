@@ -301,7 +301,7 @@
   try { if (document.referrer) refHost = new URL(document.referrer).hostname; } catch (e) {}
 
   if (API) {
-    fetch(API + '/api/config').then(r => r.ok ? r.json() : null).then(c => { applyPricing(c); applyHype(c); }).catch(() => {});
+    fetch(API + '/api/config').then(r => r.ok ? r.json() : null).then(c => { applyPricing(c); applyHype(c); const ir = $('#inviteRule'); if (ir && c && c.confirmMail) ir.hidden = false; }).catch(() => {});
     let seen = false;
     try { seen = sessionStorage.getItem('fc_hit') === '1'; sessionStorage.setItem('fc_hit', '1'); } catch (e) {}
     if (!seen) post('/api/hit', { source, referrer: refHost }).catch(() => {});
@@ -369,6 +369,7 @@
   const failText = async r => {
     if (r.status === 429) return 'Too many attempts. Wait a minute and try again.';
     let d = {}; try { d = await r.json(); } catch (e) {}
+    if (r.status === 404 && d.message === 'Not found.') return 'This is not available yet. Try again in a few minutes.';   // the server is still on the version before this feature
     return d.message || 'That did not save. Try again in a minute.';
   };
 
@@ -420,6 +421,67 @@
       inv.hidden = false;
     }
   }
+  /* ---------- confirm your email ---------- */
+  const cBox = $('#confirmBox'), cMsg = $('#confirmMsg'), cForm = $('#confirmForm');
+  let myRef = '';
+  function showConfirm(email, position) {
+    if (!cBox) return;
+    cBox.classList.remove('is-done');
+    $('#confirmTitle').textContent = position > 0 ? `Confirm your email to lock in #${num(position)}` : 'One step left: confirm your email';
+    $('#confirmTo').textContent = email || 'your address';
+    const can = !!(token && myRef);                                   // only this browser's own entry can ask again or correct the address
+    $('#confirmAgain').hidden = !can; $('#confirmFix').hidden = !can;
+    cForm.hidden = true; $('#confirmFix').setAttribute('aria-expanded', 'false');
+    say(cMsg, ''); cBox.hidden = false;
+  }
+  function confirmedNow() {
+    if (!cBox || cBox.hidden) return;
+    cBox.classList.add('is-done');
+    $('#confirmTitle').textContent = 'Email confirmed';
+    cBox.querySelector('.confirm__text').textContent = 'Your number is locked in. We email you the moment you can order.';
+    cBox.querySelector('.confirm__row').hidden = true; cForm.hidden = true; say(cMsg, '');
+  }
+  if (cBox) {
+    $('#confirmAgain').addEventListener('click', async e => {
+      const b = e.currentTarget;
+      b.disabled = true; say(cMsg, '');
+      try {
+        const r = await post('/api/waitlist/resend', { ref: myRef, token });
+        if (!r.ok) say(cMsg, await failText(r));
+        else { const d = await r.json(); if (d.confirmed) confirmedNow(); else say(cMsg, 'Sent. Give it a minute, and look in your spam folder too.', true); }
+      } catch (err) { say(cMsg, 'Could not reach the server. Check your connection and try again.'); }
+      b.disabled = false;
+    });
+    $('#confirmFix').addEventListener('click', e => {
+      cForm.hidden = !cForm.hidden; e.currentTarget.setAttribute('aria-expanded', String(!cForm.hidden));
+      if (!cForm.hidden) $('#confirmNew').focus();
+    });
+    cForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const inp = $('#confirmNew'), email = inp.value.trim(), b = $('#confirmSave');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say(cMsg, 'Enter a valid email address.'); inp.focus(); return; }
+      b.disabled = true; say(cMsg, '');
+      try {
+        const r = await post('/api/waitlist/email', { ref: myRef, token, email });
+        if (!r.ok) say(cMsg, await failText(r));
+        else {
+          const d = await r.json();
+          token = d.token || token;
+          const m = store.get('fc_me'); if (m) store.set('fc_me', { ...m, token });
+          $('#confirmTo').textContent = d.email; inp.value = ''; cForm.hidden = true; $('#confirmFix').setAttribute('aria-expanded', 'false');
+          if (d.pending === false) confirmedNow();
+          else say(cMsg, d.sent ? 'Changed. The link is on its way to the new address.' : 'Changed. Tap "Send it again" in two minutes if no email arrives.', true);
+        }
+      } catch (err) { say(cMsg, 'Could not reach the server. Check your connection and try again.'); }
+      b.disabled = false;
+    });
+    // confirmed in another tab or on the phone: notice it when the visitor comes back to this tab
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden || cBox.hidden || cBox.classList.contains('is-done') || !token || !myRef) return;
+      fetch(API + '/api/waitlist/status?ref=' + myRef + '&token=' + token).then(r => r.ok ? r.json() : null).then(d => { if (d && d.pending === false) confirmedNow(); }).catch(() => {});
+    });
+  }
+
   const copyBtn = $('#inviteCopy');
   if (copyBtn) copyBtn.addEventListener('click', async () => {
     const inp = $('#inviteLink');
@@ -431,7 +493,8 @@
   if (linkInp) linkInp.addEventListener('focus', () => linkInp.select());
   const notMe = $('#notMe');
   if (notMe) notMe.addEventListener('click', () => {
-    store.del('fc_me'); token = '';
+    store.del('fc_me'); token = ''; myRef = '';
+    if (cBox) cBox.hidden = true;
     done.hidden = true; join.hidden = false; join.reset();
     ['#place', '#invite'].forEach(q => { const el = $(q); if (el) el.hidden = true; });
     more.hidden = false; join.email.focus();
@@ -440,7 +503,7 @@
   // returning visitor: show their place instead of an empty form
   const me = store.get('fc_me');
   if (API && join && me && CODE.test(me.ref || '')) {
-    fetch(API + '/api/waitlist/status?ref=' + me.ref).then(async r => {
+    fetch(API + '/api/waitlist/status?ref=' + me.ref + (/^[a-f0-9]{48}$/.test(me.token || '') ? '&token=' + me.token : '')).then(async r => {
       if (r.status === 404) { store.del('fc_me'); return; }
       if (!r.ok) return;
       let d = await r.json();
@@ -448,12 +511,14 @@
       if (bot && token) {                                             // already on the list and now arriving from the bot: add the status to this entry
         try {
           const l = await post('/api/waitlist/link', { ref: me.ref, token, bot });
-          if (l.ok) { d = await l.json(); store.del('fc_bot'); bot = ''; }
+          if (l.ok) { d = { pending: d.pending, email: d.email, ...(await l.json()) }; store.del('fc_bot'); bot = ''; }
         } catch (e) {}
       }
       join.hidden = true; done.hidden = false;
       if (!token || me.answered) more.hidden = true;
       showPlace({ ...d, ref: me.ref });
+      myRef = me.ref;
+      if (d.pending) showConfirm(d.email, d.position);
     }).catch(() => {});
   }
 
@@ -496,9 +561,14 @@
       token = d.token || '';
       join.hidden = true; done.hidden = false;
       let note = '';
-      if (d.already) note = d.position > 0 ? 'This email is already on the list. This is your number.' : 'This email is already on the list. We will let you know when FINNPUTER Card is ready.';
-      else if (d.confirm) note = 'One more step: open the email we just sent and confirm your address.';
+      if (d.already) {
+        note = d.position > 0 ? 'This email is already on the list. This is your number.' : 'This email is already on the list. We will let you know when FINNPUTER Card is ready.';
+        if (d.resent) note += ' We sent the confirmation link again. Look in your spam folder too.';
+      }
       showPlace(d, note);
+      myRef = d.ref || '';
+      if (cBox) cBox.hidden = true;
+      if (!d.already && (d.pending != null ? d.pending : d.confirm)) showConfirm(email, d.position);
       if (d.ref) { store.set('fc_me', { ref: d.ref, token }); store.del('fc_inv'); store.del('fc_bot'); bot = ''; }
       if (guest) guest.hidden = true;
       if (!token) more.hidden = true;

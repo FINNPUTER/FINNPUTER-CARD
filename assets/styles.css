@@ -427,3 +427,22 @@ button,input,select{font:inherit;color:inherit}
 .moves__cta .fine{margin:0;flex:1 1 16em}
 .perk{margin-top:10px;font-family:var(--mono);font-size:.78rem;letter-spacing:.03em;line-height:1.5;color:var(--mint)}
 @media (max-width:560px){.moves__list li{flex-direction:column;gap:4px}.moves__list span{text-align:left}}
+.phone__plus{color:var(--mint)}
+/* confirm your email: the one thing still to do after joining */
+.confirm{margin-top:18px;padding:16px 18px;border-radius:18px;border:1px solid rgba(246,213,149,.5);background:linear-gradient(160deg,rgba(223,160,81,.16),rgba(223,160,81,.04) 65%)}
+.confirm__title{display:flex;align-items:center;gap:10px;font-weight:800;font-stretch:112%;font-size:1.02rem;line-height:1.25;color:var(--gold-hi)}
+.confirm__dot{flex:none;width:9px;height:9px;border-radius:50%;background:var(--gold-hi);box-shadow:0 0 0 0 rgba(246,213,149,.6);animation:confirmPulse 1.8s ease-out infinite}
+@keyframes confirmPulse{to{box-shadow:0 0 0 10px rgba(246,213,149,0)}}
+.confirm__text{margin-top:8px;font-size:.94rem;line-height:1.5;color:var(--bone)}
+.confirm__text b{font-weight:700;word-break:break-all}
+.confirm__row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:14px}
+.confirm__link{background:none;border:0;padding:6px 2px;min-height:42px;color:var(--bone);font:inherit;font-size:.86rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.confirm__fix{display:flex;gap:8px;margin-top:12px}
+.confirm__fix input{flex:1;min-width:0;height:42px;padding:0 14px;border-radius:999px;border:1px solid var(--line-2);background:rgba(0,0,0,.45);color:var(--bone);font:inherit;font-size:.9rem}
+.confirm__msg{margin-top:10px;font-size:.86rem;color:#ff9a8a}
+.confirm__msg:empty{display:none}
+.confirm__msg.is-ok{color:var(--mint)}
+.confirm.is-done{border-color:rgba(61,242,160,.4);background:linear-gradient(160deg,rgba(61,242,160,.12),rgba(61,242,160,.03) 65%)}
+.confirm.is-done .confirm__title{color:var(--mint)}
+.confirm.is-done .confirm__dot{background:var(--mint);animation:none}
+@media (prefers-reduced-motion:reduce){.confirm__dot{animation:none}}
