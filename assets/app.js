@@ -400,9 +400,11 @@
       pk.textContent = t; pk.hidden = !t;
     }
     if (d.ref && inv) {
-      const link = location.origin + location.pathname.replace(/index\.html$/, '') + '?invite=' + d.ref;
+      // with the API the shared link is the card page: it shows the card with the number as the link preview
+      const link = API ? API + '/c/' + d.ref : location.origin + location.pathname.replace(/index\.html$/, '') + '?invite=' + d.ref;
       $('#inviteLink').value = link;
-      const text = (d.position > 0 ? `Got my number for the FINNPUTER Card: #${num(d.position)}.` : `I'm on the list for the FINNPUTER Card.`) + ' One card, fiat or crypto. Get yours:';
+      const text = (d.position > 0 ? `I'm #${num(d.position)} in line for the FINNPUTER Card.` : `I'm on the list for the FINNPUTER Card.`) + ' Virtual, physical and metal. Get your number:';
+      shareCard(d, text, link);
       $('#inviteX').href = 'https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(link);
       const tg = $('#inviteTg'), wa = $('#inviteWa');
       if (tg) tg.href = 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text);
@@ -414,7 +416,7 @@
       if (ps) {
         if (d.premiumInvites > 0) {
           ps.textContent = `${num(d.premiumInvites)} Premium ${d.premiumInvites === 1 ? 'member' : 'members'} joined through you.` +
-            (d.partner === 'metal_free' ? ' Your metal card comes without the card price.' : d.partner === 'metal_slot' ? ' You have a reserved place in the first metal batch.' : '');
+            (d.partner === 'metal_slot' ? ' 10 FOR METAL: you are at the front of the first metal batch with 50% off the metal card price.' : '');
           ps.hidden = false;
         } else ps.hidden = true;
       }
@@ -481,6 +483,36 @@
       fetch(API + '/api/waitlist/status?ref=' + myRef + '&token=' + token).then(r => r.ok ? r.json() : null).then(d => { if (d && d.pending === false) confirmedNow(); }).catch(() => {});
     });
   }
+
+  // the card with the number: shown after joining, saved or shared as an image
+  let shareData = null;
+  function shareCard(d, text, link) {
+    const fig = $('#shareCard'), img = $('#shareImg');
+    if (!fig || !img || !API) return;
+    const src = API + '/c/' + d.ref + '.jpg?n=' + (d.position || 0);
+    shareData = { src, text, link, name: 'finnputer-card-' + (d.position || d.ref) + '.jpg' };
+    if (img.getAttribute('src') !== src) { img.onload = () => { fig.hidden = false; }; img.onerror = () => { fig.hidden = true; }; img.src = src; }
+    const sv = $('#shareSave');
+    if (sv && navigator.canShare && navigator.canShare({ files: [new File([''], 'x.jpg', { type: 'image/jpeg' })] })) sv.textContent = 'Share image';
+  }
+  const saveBtn = $('#shareSave');
+  if (saveBtn) saveBtn.addEventListener('click', async () => {
+    if (!shareData) return;
+    const label = saveBtn.textContent;
+    saveBtn.disabled = true; saveBtn.textContent = 'One moment';
+    try {
+      const blob = await fetch(shareData.src).then(r => { if (!r.ok) throw new Error('img'); return r.blob(); });
+      const file = new File([blob], shareData.name, { type: 'image/jpeg' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file], text: shareData.text + ' ' + shareData.link }); } catch (e) {}
+      } else {
+        const a = document.createElement('a'), u = URL.createObjectURL(blob);
+        a.href = u; a.download = shareData.name; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(u), 4000);
+      }
+    } catch (e) { window.open(shareData.src, '_blank', 'noopener'); }
+    saveBtn.disabled = false; saveBtn.textContent = label;
+  });
 
   const copyBtn = $('#inviteCopy');
   if (copyBtn) copyBtn.addEventListener('click', async () => {
